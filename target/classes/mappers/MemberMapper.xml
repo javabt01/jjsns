@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="member">
+ 
+ 	<select id="getMember" parameterType = "hashmap" resultType="MemberDto">
+ 		select uid, id from tbl_member
+ 		where id = #{id} and pw = #{pw}
+ 	</select>
+ 	
+ 	<insert id="joinMember" parameterType="MemberDto">
+ 		insert into tbl_member
+ 			(id, pw)
+ 		values
+ 			(#{id},#{pw})
+ 	</insert>
+    
+    <select id="idDupCheck" parameterType="String" resultType="String">
+    	select id from tbl_member 
+    	where id=#{id}
+    </select>
+    
+    <update id="keepLogin" parameterType="MemberDto">
+    	update tbl_member
+    	set
+    		session_id = #{session_id},
+    		session_limit = #{session_limit}
+    	where
+    		id=#{id}
+    </update>
+    
+    <select id="getMemberBySessionId" parameterType="String" resultType="MemberDto">
+    	select 
+    		uid, id
+    	from 
+    		tbl_member
+    	where
+    		session_id = #{sessionId} and
+    		session_limit > now()
+    </select>
+    
+    
+</mapper>
+
